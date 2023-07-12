@@ -29,7 +29,6 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart) {
   __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_ORE);
   HAL_Delay(1);
   HAL_UART_RxCpltCallback(huart);
-//  uart.Init(huart);
 }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
@@ -40,12 +39,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
 void Uart::Init(UART_HandleTypeDef *huart) {
   huart_ = huart;
   HAL_UART_Receive_IT(huart_, (uint8_t*)&message, sizeof(tdPwmData));
-//  HAL_UART_Receive_IT(huart_, message, 6);
 }
 
 HAL_StatusTypeDef Uart::ReceiveMessage() {
   HAL_UART_Receive_IT(huart_, (uint8_t*)&message, sizeof(tdPwmData));
-//  return HAL_UART_Receive_IT(huart_, message, 6);
 }
 
 void Uart::ReadMessage() {
@@ -53,10 +50,7 @@ void Uart::ReadMessage() {
 //  crc32.process_bytes( &message.data, sizeof(message.data) );
 //  uint32_t crc = crc32.checksum();
 //  if(crc == message.crc) {
-//    uint32_t data = huart_->Instance->DR;
-//    message.data = huart_->Instance->DR;
     osStatus_t status = osMessageQueuePut(SignalGeneratorQueueHandle, &message, 0U, 0U);
-//    osStatus_t status = osMessageQueuePut(SignalGeneratorQueueHandle, message, 0U, 100U);
     if(status == osOK) {
 //      cout << status << endl;
 //      cout << data.emitter << endl;
@@ -69,7 +63,4 @@ void Uart::ReadMessage() {
       Error_Handler();
 //      cout << status << endl;
     }
-//  } else {
-////    Error_Handler();
-//  }
 }

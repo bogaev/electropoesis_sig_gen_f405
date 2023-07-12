@@ -9,7 +9,6 @@
 #include "signal_generator/pwm_controller.h"
 #include "signal_generator/sig_gen_include.h"
 
-//extern osMutexId_t MutexSigGeneratorHandle;
 extern osMessageQueueId_t SignalGeneratorQueueHandle;
 extern UART_HandleTypeDef huart5;
 extern Uart uart;
@@ -26,27 +25,39 @@ static SIG_GEN_HandleTypeDef* emitter_to_siggen[4] = {
   &sig_gen_4
 };
 
-//static GPIO_TypeDef* emitter_to_led_port[8] = { 
-//  LED1_GREEN_GPIO_Port,
-//  LED2_GREEN_GPIO_Port,
-//  LED3_RED_GPIO_Port,
-//  LED4_RED_GPIO_Port,
-//  LED1_GREEN_GPIO_Port,
-//  LED2_GREEN_GPIO_Port,
-//  LED3_RED_GPIO_Port,
-//  LED4_RED_GPIO_Port
-//};
-//
-//static uint16_t emitter_to_led_pin[8] = { 
-//  LED1_GREEN_Pin,
-//  LED2_GREEN_Pin,
-//  LED3_RED_Pin,
-//  LED4_RED_Pin,
-//  LED1_GREEN_Pin,
-//  LED2_GREEN_Pin,
-//  LED3_RED_Pin,
-//  LED4_RED_Pin
-//};
+//#define ADDITIONAL_MCU
+
+#ifndef ADDITIONAL_MCU
+
+#define START_LED 0
+#define END_LED 4
+
+static GPIO_TypeDef* emitter_to_led_port[8] = { 
+  LED1_GREEN_GPIO_Port,
+  LED2_GREEN_GPIO_Port,
+  LED3_RED_GPIO_Port,
+  LED4_RED_GPIO_Port,
+  LED1_GREEN_GPIO_Port,
+  LED2_GREEN_GPIO_Port,
+  LED3_RED_GPIO_Port,
+  LED4_RED_GPIO_Port
+};
+
+static uint16_t emitter_to_led_pin[8] = { 
+  LED1_GREEN_Pin,
+  LED2_GREEN_Pin,
+  LED3_RED_Pin,
+  LED4_RED_Pin,
+  LED1_GREEN_Pin,
+  LED2_GREEN_Pin,
+  LED3_RED_Pin,
+  LED4_RED_Pin
+};
+
+#else
+
+#define START_LED 4
+#define END_LED 8
 
 static GPIO_TypeDef* emitter_to_led_port[8] = { 
   LED2_GREEN_GPIO_Port,
@@ -70,8 +81,8 @@ static uint16_t emitter_to_led_pin[8] = {
   LED4_RED_Pin
 };
 
-//volatile size_t counterNextHalfWaveSemaphore;
-//static void GiveSemaphore();
+#endif
+
 static void MY_SIG_GEN_Init();
 
 void StartDefaultTask(void *argument) {
@@ -97,10 +108,6 @@ void StartDefaultTask(void *argument) {
   SIG_GEN_Start(&sig_gen_4);
   
   for(;;) {
-//    HAL_GPIO_TogglePin(LED2_GREEN_GPIO_Port, LED2_GREEN_Pin);
-//    if(!__HAL_UART_GET_IT_SOURCE(&huart5, UART_IT_RXNE)) {
-//      uart.Init(&huart5);
-//    }
   }
 }
 
@@ -117,17 +124,13 @@ void ChangeSignalParamsTask(void *argument) {
     // wait for message
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
     if (status == osOK) {
-//      osMutexAcquire(MutexSigGeneratorHandle, osWaitForever);
-//      if (msg.emitter < 4) {
-      if (msg.emitter > 3 && msg.emitter < 8) {
+      if (msg.emitter >= START_LED && msg.emitter < END_LED) {
         SIG_GEN_SetSignal(emitter_to_siggen[msg.emitter], msg.signal, msg.param, msg.value);
-//        HAL_GPIO_TogglePin(emitter_to_led_port[msg.emitter], emitter_to_led_pin[msg.emitter]);
         HAL_GPIO_WritePin(emitter_to_led_port[msg.emitter], emitter_to_led_pin[msg.emitter], GPIO_PIN_SET);
         HAL_Delay(500);
         HAL_GPIO_WritePin(emitter_to_led_port[msg.emitter], emitter_to_led_pin[msg.emitter], GPIO_PIN_RESET);
       }
       HAL_Delay(1);
-//      osMutexRelease(MutexSigGeneratorHandle);
     } else {
       Error_Handler();
     }
