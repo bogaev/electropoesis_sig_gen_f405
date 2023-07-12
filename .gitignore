@@ -1,0 +1,13 @@
+*.hex
+*.map
+*.dep
+*.wsdt
+*.rar
+*.zip
+*.sim
+*.log
+*.o
+Middlewares
+Drivers
+EWARM/405_PA_Add
+.mxproject
