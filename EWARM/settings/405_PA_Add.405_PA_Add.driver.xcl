@@ -10,7 +10,7 @@
 
 "--drv_verify_download" 
 
-"--semihosting=none" 
+"--semihosting" 
 
 "--device=STM32F405RG" 
 
@@ -21,8 +21,6 @@
 "--drv_swo_clock_setup=168000000,0,2000000" 
 
 "--drv_catch_exceptions=0x000" 
-
-"--drv_communication=USB:#53FF6E064980555729541587" 
 
 "--drv_debug_ap=0" 
 

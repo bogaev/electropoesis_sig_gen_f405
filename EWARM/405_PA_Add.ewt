@@ -1439,7 +1439,7 @@
             <group>
                 <name>app</name>
                 <group>
-                    <name>ComInterface</name>
+                    <name>com_interface</name>
                     <file>
                         <name>$PROJ_DIR$\..\app\com_interface\com_interface.cpp</name>
                     </file>
@@ -1448,12 +1448,21 @@
                     </file>
                 </group>
                 <group>
-                    <name>OsTasks</name>
+                    <name>os_tasks</name>
                     <file>
                         <name>$PROJ_DIR$\..\app\pwm_os_tasks\pwm_os_tasks.cpp</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\app\pwm_os_tasks\pwm_os_tasks.h</name>
+                    </file>
+                </group>
+                <group>
+                    <name>sig_gens</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\app\sig_gens\sig_gens.cpp</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\app\sig_gens\sig_gens.h</name>
                     </file>
                 </group>
                 <file>
@@ -1518,7 +1527,7 @@
                 </file>
             </group>
             <group>
-                <name>SigGen</name>
+                <name>SigGenLib</name>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\Components\sig_gen_h_only\signal_generator\params_updater.h</name>
                 </file>

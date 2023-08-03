@@ -60,7 +60,7 @@ osThreadId_t ChngSignalParamHandle;
 const osThreadAttr_t ChngSignalParam_attributes = {
   .name = "ChngSignalParam",
   .stack_size = 1024 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for SignalGeneratorQueue */
 osMessageQueueId_t SignalGeneratorQueueHandle;
@@ -102,7 +102,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* creation of SignalGeneratorQueue */
-  SignalGeneratorQueueHandle = osMessageQueueNew (8, sizeof(tdPwmData), &SignalGeneratorQueue_attributes);
+  SignalGeneratorQueueHandle = osMessageQueueNew (32, sizeof(tdPwmData), &SignalGeneratorQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */

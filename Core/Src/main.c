@@ -30,7 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-    
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -71,7 +71,7 @@ extern void UartStart();
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
+  /* USER CODE BEGIN 1 */-
 
   /* USER CODE END 1 */
 
@@ -108,8 +108,7 @@ int main(void)
   MX_UART5_Init();
   MX_CRC_Init();
   /* USER CODE BEGIN 2 */
-//  UartStart();
-//  HAL_TIM_Base_Start_IT(&htim13);
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -177,62 +176,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-//void SignalGeneratorTest() {
-//	static int is_first = 0;
-//	static int i = 0;
-//	static int cnt = 0;
-//	
-//	if (is_first == 0) {
-//		SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//		SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//    SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//		SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//		
-//		SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_CARRIER, 100);
-//		SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_CARRIER, 100);
-//		SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 100);
-//		SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_CARRIER, 100);
-//		
-////		SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_FREQ_MOD, SIG_GEN_TYPE_SINUS);
-////		SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_FREQ_MOD, 5);
-////		SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_AMP_MOD, SIG_GEN_TYPE_SINUS);
-////		SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_AMP_MOD, 10);
-//		
-////		SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_FREQ_MOD, SIG_GEN_TYPE_SINUS);
-//////		SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_FREQ_MOD, 5);
-////		SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_AMP_MOD, SIG_GEN_TYPE_SINUS);
-////		SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_AMP_MOD, 20);
-//		
-////		SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_FREQ_MOD, SIG_GEN_TYPE_SINUS);
-////		SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_FREQ_MOD, 10);
-////		SIG_GEN_SetFreqModSens(&sig_gen_3, 50);
-////		SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_AMP_MOD, SIG_GEN_TYPE_SINUS);
-////		SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_AMP_MOD, 50);
-////		SIG_GEN_SetAmpModDepth(&sig_gen_3, 50);
-//		
-////		SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_FREQ_MOD, SIG_GEN_TYPE_SINUS);
-////		SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_FREQ_MOD, 5);
-////		SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_AMP_MOD, SIG_GEN_TYPE_SINUS);
-////		SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_AMP_MOD, 40);
-//		++is_first;
-//	}
-//	
-//	cnt++;
-//	if (cnt > 5000) {
-//		//SIG_GEN_SetAmpModDepth(&sig_gen_0, i);
-//		//SIG_GEN_SetFreqModSens(&sig_gen_0, i);
-////    SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_NONE);
-////		SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 0);
-//		SIG_GEN_Pause(&sig_gen_3);
-//		i += 1;
-//		if (i % 2  == 0) {
-////      SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-////      SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 100);
-//      SIG_GEN_Resume(&sig_gen_3);
-//		}
-//		cnt = 0;
-//	}
-//}
+
 /* USER CODE END 4 */
 
 /**
@@ -252,9 +196,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-  else if (htim->Instance == TIM13) {
-//    SignalGeneratorTest();
-  }
+
   /* USER CODE END Callback 1 */
 }
 
