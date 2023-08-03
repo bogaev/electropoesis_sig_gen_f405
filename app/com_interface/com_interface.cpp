@@ -1,8 +1,9 @@
-#include "app/com_interface/com_interface.h"
-#include "boost/crc.hpp"
-#include <iostream>
+#include "com_interface.h"
 
-using namespace std;
+#include "app/sig_gens/sig_gens.h"
+#include "boost/crc.hpp"
+
+#include <iostream>
 
 HAL_UART_StateTypeDef debug_uart;
 Uart uart;
@@ -21,7 +22,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   if(uart.ReceiveMessage() == HAL_OK) {
     uart.ReadMessage();
   } else {
-    Error_Handler();
+//    Error_Handler();
+    HAL_UART_ErrorCallback(huart);
   }
 }
 
@@ -38,19 +40,23 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
 
 void Uart::Init(UART_HandleTypeDef *huart) {
   huart_ = huart;
-  HAL_UART_Receive_IT(huart_, (uint8_t*)&message, sizeof(tdPwmData));
+  ReceiveMessage();
 }
 
 HAL_StatusTypeDef Uart::ReceiveMessage() {
-  HAL_UART_Receive_IT(huart_, (uint8_t*)&message, sizeof(tdPwmData));
+  return HAL_UART_Receive_IT(huart_, (uint8_t*)&message, sizeof(tdUartMessage));
 }
 
 void Uart::ReadMessage() {
-//  boost::crc_32_type crc32;
-//  crc32.process_bytes( &message.data, sizeof(message.data) );
-//  uint32_t crc = crc32.checksum();
-//  if(crc == message.crc) {
-    osStatus_t status = osMessageQueuePut(SignalGeneratorQueueHandle, &message, 0U, 0U);
+  boost::crc_32_type crc32;
+  crc32.process_bytes( &message.data, sizeof(message.data) );
+  uint32_t crc = crc32.checksum();
+  if (crc == message.crc) {
+    if (!emitter_to_siggen.count(message.data.emitter)) {
+      PauseAllChannels();
+      return;
+    }
+    osStatus_t status = osMessageQueuePut(SignalGeneratorQueueHandle, &message.data, 0U, 0U);
     if(status == osOK) {
 //      cout << status << endl;
 //      cout << data.emitter << endl;
@@ -61,6 +67,8 @@ void Uart::ReadMessage() {
       ReceiveMessage();
     } else {
       Error_Handler();
+//      ReceiveMessage();
 //      cout << status << endl;
     }
+  }
 }
