@@ -11,7 +11,7 @@ extern osMessageQueueId_t SignalGeneratorQueueHandle;
 extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 extern "C" void UartStart(UART_HandleTypeDef *huart);
 
-class Uart {  
+class Uart {
 public:
   void Init(UART_HandleTypeDef *huart);
   HAL_StatusTypeDef ReceiveMessage();
@@ -24,7 +24,9 @@ private:
   } tdUartMessage;
 
   UART_HandleTypeDef* huart_;
-  tdPwmData message;
+  tdUartMessage message;
 };
+
+extern Uart uart;
 
 #endif // #ifndef _COM_INTERFACE_H_
