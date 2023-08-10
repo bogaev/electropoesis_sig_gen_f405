@@ -9,9 +9,9 @@
 #include "signal_generator/sig_gen_include.h"
 
 #ifdef SELF_MESSAGE_ON
-  #define DELAY_LED 1000
+  #define DELAY_LED 2000
 #else
-  #define DELAY_LED 10
+  #define DELAY_LED 100
 #endif
 
 void StartDefaultTask(void *argument) {
@@ -37,13 +37,14 @@ void StartDefaultTask(void *argument) {
   SIG_GEN_Start(&sig_gen_4);
 
   PauseAllChannels();
+  RELAY_GROUND();
 
   for(;;) {
 #ifdef SELF_MESSAGE_ON
-    static tdPwmData data = {100, 0, 0, UART_SIGNAL_CARRIER, SIG_GEN_PARAM_FREQ, 0};
-    osDelay(DELAY_LED);
-    osStatus_t status = osMessageQueuePut(SignalGeneratorQueueHandle, &data, 0U, 0U);
-    data.emitter = (data.emitter < 7 ? ++data.emitter : 0);
+    static tdUartMessage msg = {{100, 0, 4, UART_SIGNAL_CARRIER, SIG_GEN_PARAM_FREQ, 0}, 0};
+    osDelay(DELAY_LED*2);
+    osStatus_t status = osMessageQueuePut(SignalGeneratorQueueHandle, &msg, 0U, 0U);
+    msg.data.emitter = (msg.data.emitter < 3 ? ++msg.data.emitter : 0);
 #endif
   }
 }
@@ -54,22 +55,25 @@ void StartDefaultTask(void *argument) {
 * @retval None
 */
 void ChangeSignalParamsTask(void *argument) {
-  tdPwmData msg;
+  tdUartMessage msg;
   osStatus_t status;
 
   for(;;) {
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
     if (status == osOK) {
-      uint8_t channel = msg.emitter;
+      uint8_t channel = msg.data.emitter;
       if (emitter_to_siggen.count(channel)) {
         PauseAllChannels();
         osDelay(1);
 //        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.signal, msg.param, msg.value);
         SIG_GEN_Resume(emitter_to_siggen[channel]);
         LedPortPinTypeDef led = emitter_to_led[channel];
-        HAL_GPIO_WritePin(led.first, led.second, GPIO_PIN_SET);
+        LED_ON(led.first, led.second);
+//        RELAY_GROUND();
         osDelay(DELAY_LED);
-        HAL_GPIO_WritePin(led.first, led.second, GPIO_PIN_RESET);
+        LED_OFF(led.first, led.second);
+//        RELAY_TRI_STATE();
+        osDelay(DELAY_LED);
       }
     } else {
 //      Error_Handler();

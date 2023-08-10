@@ -37,9 +37,16 @@ typedef struct {
   uint8_t reserved2;
 } tdPwmData;
 
+typedef enum {
+  UART_MESSAGE_DATA = 0,
+  UART_MESSAGE_START,
+  UART_MESSAGE_END
+} tdMessageType;
+
 typedef struct {
-  tdPwmData data;
-  uint32_t crc;
+//  uint8_t type = UART_MESSAGE_DATA;
+  tdPwmData data = {0};
+  uint32_t crc = 0;
 } tdUartMessage;
 
 #endif // #ifndef _PWM_TYPES_H_

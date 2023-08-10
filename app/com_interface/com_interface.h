@@ -18,11 +18,6 @@ public:
   void ReadMessage();
 
 private:
-  typedef struct tdUartMessage_ {
-    tdPwmData data = {0};
-    uint32_t crc = 0;
-  } tdUartMessage;
-
   UART_HandleTypeDef* huart_;
   tdUartMessage message;
 };

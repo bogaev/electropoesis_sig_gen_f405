@@ -21,7 +21,6 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "adc.h"
-#include "can.h"
 #include "crc.h"
 #include "dma.h"
 #include "tim.h"
@@ -71,7 +70,7 @@ extern void UartStart();
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */-
+  /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
 
@@ -94,7 +93,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_CAN1_Init();
   MX_ADC1_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
@@ -108,7 +106,6 @@ int main(void)
   MX_UART5_Init();
   MX_CRC_Init();
   /* USER CODE BEGIN 2 */
-
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -117,6 +114,7 @@ int main(void)
 
   /* Start scheduler */
   osKernelStart();
+
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
