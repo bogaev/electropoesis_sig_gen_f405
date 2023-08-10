@@ -48,27 +48,25 @@ HAL_StatusTypeDef Uart::ReceiveMessage() {
 }
 
 void Uart::ReadMessage() {
-  boost::crc_32_type crc32;
-  crc32.process_bytes( &message.data, sizeof(message.data) );
-  uint32_t crc = crc32.checksum();
-  if (crc == message.crc) {
+//  boost::crc_32_type crc32;
+//  crc32.process_bytes( &message.data, sizeof(message.data) );
+//  uint32_t crc = crc32.checksum();
+  //if (crc == message.crc) {
+//    if (message.type != UART_MESSAGE_DATA) {
+//      return;
+//    }
     if (!emitter_to_siggen.count(message.data.emitter)) {
-      PauseAllChannels();
+//      RELAY_TRI_STATE();
+//      PauseAllChannels();
       return;
     }
     osStatus_t status = osMessageQueuePut(SignalGeneratorQueueHandle, &message.data, 0U, 0U);
     if(status == osOK) {
-//      cout << status << endl;
-//      cout << data.emitter << endl;
-//      cout << data.signal << endl;
-//      cout << data.param << endl;
-//      cout << data.value << endl;
-//      cout << endl;
       ReceiveMessage();
     } else {
       Error_Handler();
 //      ReceiveMessage();
 //      cout << status << endl;
     }
-  }
+  //}
 }

@@ -58,10 +58,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define ADC1_IN12_IND7_POS_Pin GPIO_PIN_2
-#define ADC1_IN12_IND7_POS_GPIO_Port GPIOC
-#define ADC1_IN13_IND7_NEG_Pin GPIO_PIN_3
-#define ADC1_IN13_IND7_NEG_GPIO_Port GPIOC
 #define ADC1_IN0_IND1_POS_Pin GPIO_PIN_0
 #define ADC1_IN0_IND1_POS_GPIO_Port GPIOA
 #define ADC1_IN1_IND1_NEG_Pin GPIO_PIN_1
@@ -80,6 +76,8 @@ void Error_Handler(void);
 #define TEST_MODE_GPIO_Port GPIOB
 #define LED2_GREEN_Pin GPIO_PIN_13
 #define LED2_GREEN_GPIO_Port GPIOB
+#define RELAY_220V_Pin GPIO_PIN_6
+#define RELAY_220V_GPIO_Port GPIOC
 #define IND7_POS_DMA_Pin GPIO_PIN_8
 #define IND7_POS_DMA_GPIO_Port GPIOC
 #define IND7_NEG_DMA_Pin GPIO_PIN_9
@@ -108,7 +106,13 @@ void Error_Handler(void);
 #define RESERVE_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define THIS_IS_MAIN_MCU
+//#define SELF_MESSAGE_ON
 
+#ifndef THIS_IS_MAIN_MCU
+#define RELAY_220V_Pin GPIO_PIN_2
+#define RELAY_220V_GPIO_Port GPIOC
+#endif
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
