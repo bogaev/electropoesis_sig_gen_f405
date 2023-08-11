@@ -76,7 +76,7 @@ namespace mod_values {
   constexpr static float MIN_ACT_TIME_MS = 200.;
   constexpr static float CARRIER_FREQ = 5000.;
   constexpr static float FIXED_MOD_FREQ = 150.;
- 
+
   typedef enum { FM_10 = 0, FM_20, FM_30, FM_50, FM_80, FM_100, FM_150 } enFreqMods;
   constexpr static int FREQ_MOD_NUM = 7;
   constexpr static float FREQ_MOD[FREQ_MOD_NUM] = { 10., 20., 30., 50., 80., 100., 150. };
@@ -92,7 +92,7 @@ namespace mod_values {
     {2.0, 3.0, 20.0},
     {4.0, 6.0, 40.0}
   };
-  
+
   typedef enum { FLEX = 0, FIXED } enStagesFreqs;
   constexpr static int STAGES_FREQ_NUM = 2;
   constexpr static float STAGES_FREQ[STAGES_FREQ_NUM] = {CARRIER_FREQ, FIXED_MOD_FREQ};

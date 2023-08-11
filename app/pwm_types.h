@@ -28,15 +28,6 @@ typedef enum {
 //  UART_PARAM_NUM
 //} enSignalParams;
 
-typedef struct {
-  uint16_t value;
-  uint16_t reserved1;
-  uint8_t emitter;
-  uint8_t signal;
-  uint8_t param;
-  uint8_t reserved2;
-} tdPwmData;
-
 typedef enum {
   UART_MESSAGE_DATA = 0,
   UART_MESSAGE_START,
@@ -44,9 +35,16 @@ typedef enum {
 } tdMessageType;
 
 typedef struct {
-//  uint8_t type = UART_MESSAGE_DATA;
+  uint8_t type;
+  uint8_t emitter;
+  uint8_t signal;
+  uint8_t param;
+  uint16_t value;
+} tdPwmData;
+
+typedef struct {
+//  uint32_t crc = 0;
   tdPwmData data = {0};
-  uint32_t crc = 0;
 } tdUartMessage;
 
 #endif // #ifndef _PWM_TYPES_H_
