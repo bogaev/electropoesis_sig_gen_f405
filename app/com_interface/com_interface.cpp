@@ -52,9 +52,6 @@ void Uart::ReadMessage() {
 //  crc32.process_bytes( &message.data, sizeof(message.data) );
 //  uint32_t crc = crc32.checksum();
   //if (crc == message.crc) {
-//    if (message.type != UART_MESSAGE_DATA) {
-//      return;
-//    }
     if (!emitter_to_siggen.count(message.data.emitter)) {
 //      RELAY_TRI_STATE();
 //      PauseAllChannels();

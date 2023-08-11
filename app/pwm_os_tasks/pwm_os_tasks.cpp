@@ -19,24 +19,25 @@ void StartDefaultTask(void *argument) {
 
   MY_SIG_GEN_Init();
 
-  SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-  SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-  SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-  SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//  SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//  SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//  SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//  SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
 
-  SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_CARRIER, 111);
-  SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_CARRIER, 122);
-  SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 133);
-  SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_CARRIER, 144);
+//  SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_CARRIER, 111);
+//  SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_CARRIER, 122);
+//  SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 133);
+//  SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_CARRIER, 144);
+//  SIG_GEN_CommitChanges(&sig_gen_1);
 
   uart.Init(&huart5);
 
-  SIG_GEN_Start(&sig_gen_1);
-  SIG_GEN_Start(&sig_gen_2);
-  SIG_GEN_Start(&sig_gen_3);
-  SIG_GEN_Start(&sig_gen_4);
+//  SIG_GEN_Start(&sig_gen_1);
+//  SIG_GEN_Start(&sig_gen_2);
+//  SIG_GEN_Start(&sig_gen_3);
+//  SIG_GEN_Start(&sig_gen_4);
 
-  PauseAllChannels();
+//  PauseAllChannels();
   RELAY_GROUND();
 
   for(;;) {
@@ -62,11 +63,11 @@ void ChangeSignalParamsTask(void *argument) {
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
     if (status == osOK) {
       uint8_t channel = msg.data.emitter;
-      if (emitter_to_siggen.count(channel)) {
-        PauseAllChannels();
-        osDelay(1);
-//        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.signal, msg.param, msg.value);
-        SIG_GEN_Resume(emitter_to_siggen[channel]);
+      if (msg.data.type == UART_MESSAGE_DATA) {
+//        PauseAllChannels();
+//        osDelay(1);
+        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.data.signal, msg.data.param, msg.data.value);
+//        SIG_GEN_Resume(emitter_to_siggen[channel]);
         LedPortPinTypeDef led = emitter_to_led[channel];
         LED_ON(led.first, led.second);
 //        RELAY_GROUND();
@@ -74,6 +75,8 @@ void ChangeSignalParamsTask(void *argument) {
         LED_OFF(led.first, led.second);
 //        RELAY_TRI_STATE();
         osDelay(DELAY_LED);
+      } else if (msg.data.type == UART_MESSAGE_END) {
+        SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
       }
     } else {
 //      Error_Handler();
