@@ -60,6 +60,7 @@ void MY_SIG_GEN_Init() {
   SEG_GEN_INIT(2, TIM_CHANNEL_1, TIM_CHANNEL_2);
   SEG_GEN_INIT(3, TIM_CHANNEL_3, TIM_CHANNEL_4);
   SEG_GEN_INIT(4, TIM_CHANNEL_1, TIM_CHANNEL_2);
+  HAL_TIM_Base_Start_IT(&htim12);
 }
 
 void PauseAllChannels() {
