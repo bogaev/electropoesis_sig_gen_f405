@@ -1,5 +1,6 @@
 #include "com_interface.h"
 
+#include "tim.h"
 #include "app/sig_gens/sig_gens.h"
 #include "boost/crc.hpp"
 
@@ -19,6 +20,12 @@ void UartStart(UART_HandleTypeDef *huart) {
   * @retval None
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+  RELAY_TRI_STATE();
+  HAL_TIM_Base_Stop_IT(&htim12);
+//  HAL_TIM_PWM_Stop_IT(&htim1, TIM_CHANNEL_ALL);
+//  HAL_TIM_PWM_Stop_IT(&htim2, TIM_CHANNEL_ALL);
+//  HAL_TIM_PWM_Stop_IT(&htim3, TIM_CHANNEL_ALL);
+//  HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_ALL);
   if(uart.ReceiveMessage() == HAL_OK) {
     uart.ReadMessage();
   } else {

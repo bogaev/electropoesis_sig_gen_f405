@@ -8,8 +8,8 @@
 #include <utility>
 #include <unordered_map>
 
-#define LED_ON(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_SET)
-#define LED_OFF(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_RESET)
+//#define LED_ON(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_SET)
+//#define LED_OFF(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_RESET)
 
 #define RELAY_TRI_STATE() HAL_GPIO_WritePin(RELAY_220V_GPIO_Port, RELAY_220V_Pin, GPIO_PIN_SET)
 #define RELAY_GROUND() HAL_GPIO_WritePin(RELAY_220V_GPIO_Port, RELAY_220V_Pin, GPIO_PIN_RESET)
