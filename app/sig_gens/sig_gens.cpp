@@ -8,8 +8,8 @@
   sig_gen_##N.pwm_mode = SIG_GEN_IT_MODE; \
   sig_gen_##N.channels[0] = CH1; \
   sig_gen_##N.channels[1] = CH2; \
-  sig_gen_##N.min_duty_cycle_percent = 60; \
-  sig_gen_##N.max_duty_cycle_percent = 98; \
+  sig_gen_##N.min_duty_cycle_percent = 53; \
+  sig_gen_##N.max_duty_cycle_percent = 67; \
   sig_gen_##N.dead_time_th_percent = 20; \
   sig_gen_##N.coeffs = 0; \
   if (SIG_GEN_Init(&sig_gen_##N) != SIG_GEN_OK) { \
