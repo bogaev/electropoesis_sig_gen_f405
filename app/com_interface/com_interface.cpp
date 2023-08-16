@@ -21,6 +21,7 @@ void UartStart(UART_HandleTypeDef *huart) {
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   RELAY_TRI_STATE();
+  LED_OFF(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
   HAL_TIM_Base_Stop_IT(&htim12);
 //  HAL_TIM_PWM_Stop_IT(&htim1, TIM_CHANNEL_ALL);
 //  HAL_TIM_PWM_Stop_IT(&htim2, TIM_CHANNEL_ALL);

@@ -24,10 +24,10 @@ SIG_GEN_HandleTypeDef sig_gen_4 = {0};
 #ifdef THIS_IS_MAIN_MCU
 
 std::unordered_map<int, LedPortPinTypeDef> emitter_to_led = {
-  {0, {LED1_GREEN_GPIO_Port, LED1_GREEN_Pin}},
-  {1, {LED2_GREEN_GPIO_Port, LED2_GREEN_Pin}},
-  {2, {LED4_RED_GPIO_Port, LED4_RED_Pin}},
-  {5, {LED3_RED_GPIO_Port, LED3_RED_Pin}}
+  {0, {LED1_HARD_FAULT_GPIO_Port, LED1_HARD_FAULT_Pin}},
+  {1, {LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin}},
+  {2, {LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin}},
+  {5, {LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin}}
 };
 
 std::unordered_map<int, SIG_GEN_HandleTypeDef*> emitter_to_siggen = {
@@ -40,10 +40,10 @@ std::unordered_map<int, SIG_GEN_HandleTypeDef*> emitter_to_siggen = {
 #else
 
 std::unordered_map<int, LedPortPinTypeDef> emitter_to_led = {
-  {3, {LED2_GREEN_GPIO_Port, LED2_GREEN_Pin}},
-  {4, {LED3_RED_GPIO_Port, LED3_RED_Pin}},
-  {6, {LED4_RED_GPIO_Port, LED4_RED_Pin}},
-  {7, {LED1_GREEN_GPIO_Port, LED1_GREEN_Pin}}
+  {3, {LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin}},
+  {4, {LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin}},
+  {6, {LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin}},
+  {7, {LED1_HARD_FAULT_GPIO_Port, LED1_HARD_FAULT_Pin}}
 };
 
 std::unordered_map<int, SIG_GEN_HandleTypeDef*> emitter_to_siggen = {

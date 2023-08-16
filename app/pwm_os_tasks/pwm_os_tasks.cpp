@@ -1,5 +1,7 @@
 #include "pwm_os_tasks.h"
+
 #include "main.h"
+#include "iwdg.h"
 
 #include "app/com_interface/com_interface.h"
 #include "app/sig_gen_config.h"
@@ -11,7 +13,7 @@
 #ifdef SELF_MESSAGE_ON
   #define DELAY_LED 2000
 #else
-  #define DELAY_LED 50
+  #define DELAY_LED 30
 #endif
 
 void StartDefaultTask(void *argument) {
@@ -44,6 +46,11 @@ void StartDefaultTask(void *argument) {
 //  PauseAllChannels();
 
   for(;;) {
+    LED_ON(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
+    osDelay(500);
+    HAL_IWDG_Refresh(&hiwdg);
+    LED_OFF(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
+    osDelay(500);
 //    osDelay(5000);
 //    RELAY_GROUND();
 //    osDelay(5000);
@@ -76,16 +83,17 @@ void ChangeSignalParamsTask(void *argument) {
         SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.data.signal, msg.data.param, msg.data.value);
 //        SIG_GEN_Resume(emitter_to_siggen[channel]);
         LedPortPinTypeDef led = emitter_to_led[channel];
-        LED_ON(LED1_GREEN_GPIO_Port, LED1_GREEN_Pin);
+        LED_ON(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
 //        RELAY_GROUND();
         osDelay(DELAY_LED);
-        LED_OFF(LED1_GREEN_GPIO_Port, LED1_GREEN_Pin);
+        LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
 //        RELAY_TRI_STATE();
         osDelay(DELAY_LED);
       } else if (msg.data.type == UART_MESSAGE_END) {
         SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
-        osDelay(3000);
-        RELAY_GROUND();
+        osDelay(1000);
+//        RELAY_GROUND();
+        LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
         HAL_TIM_Base_Start_IT(&htim12);
       }
     } else {
