@@ -58,10 +58,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define ADC1_IN0_IND1_POS_Pin GPIO_PIN_0
-#define ADC1_IN0_IND1_POS_GPIO_Port GPIOA
-#define ADC1_IN1_IND1_NEG_Pin GPIO_PIN_1
-#define ADC1_IN1_IND1_NEG_GPIO_Port GPIOA
 #define ADC1_IN2_IND2_POS_Pin GPIO_PIN_2
 #define ADC1_IN2_IND2_POS_GPIO_Port GPIOA
 #define ADC1_IN3_IND2_NEG_Pin GPIO_PIN_3
@@ -109,7 +105,7 @@ void Error_Handler(void);
 #define LED_ON(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_SET)
 #define LED_OFF(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_RESET)
 
-//#define THIS_IS_MAIN_MCU
+#define THIS_IS_MAIN_MCU
 //#define SELF_MESSAGE_ON
 
 #ifndef THIS_IS_MAIN_MCU

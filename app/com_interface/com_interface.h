@@ -20,6 +20,7 @@ public:
 private:
   UART_HandleTypeDef* huart_;
   tdUartMessage message;
+  static void UART_RxCpltCallback(UART_HandleTypeDef *huart);
 };
 
 extern Uart uart;

@@ -104,10 +104,15 @@ int main(void)
   MX_TIM12_Init();
   MX_TIM14_Init();
   MX_TIM13_Init();
-  MX_UART5_Init();
   MX_CRC_Init();
   MX_IWDG_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
+#ifdef THIS_IS_MAIN_MCU
+  MX_UART5_Init();
+#else
+  MX_UART4_Init();
+#endif
   /* USER CODE END 2 */
 
   /* Init scheduler */

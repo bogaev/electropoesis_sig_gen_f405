@@ -36,7 +36,11 @@ void StartDefaultTask(void *argument) {
   SIG_GEN_CommitChanges(&sig_gen_3);
   SIG_GEN_CommitChanges(&sig_gen_4);
 
+#ifdef THIS_IS_MAIN_MCU
   uart.Init(&huart5);
+#else
+  uart.Init(&huart4);
+#endif
 
 //  SIG_GEN_Start(&sig_gen_1);
 //  SIG_GEN_Start(&sig_gen_2);
@@ -91,8 +95,8 @@ void ChangeSignalParamsTask(void *argument) {
         osDelay(DELAY_LED);
       } else if (msg.data.type == UART_MESSAGE_END) {
         SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
-        osDelay(1000);
-//        RELAY_GROUND();
+        osDelay(2000);
+        RELAY_GROUND();
         LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
         HAL_TIM_Base_Start_IT(&htim12);
       }

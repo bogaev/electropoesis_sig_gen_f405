@@ -19,7 +19,23 @@ void UartStart(UART_HandleTypeDef *huart) {
   *                the configuration information for the specified UART module.
   * @retval None
   */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+//  RELAY_TRI_STATE();
+//  LED_OFF(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
+//  HAL_TIM_Base_Stop_IT(&htim12);
+////  HAL_TIM_PWM_Stop_IT(&htim1, TIM_CHANNEL_ALL);
+////  HAL_TIM_PWM_Stop_IT(&htim2, TIM_CHANNEL_ALL);
+////  HAL_TIM_PWM_Stop_IT(&htim3, TIM_CHANNEL_ALL);
+////  HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_ALL);
+//  if(uart.ReceiveMessage() == HAL_OK) {
+//    uart.ReadMessage();
+//  } else {
+////    Error_Handler();
+//    HAL_UART_ErrorCallback(huart);
+//  }
+//}
+
+void Uart::UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   RELAY_TRI_STATE();
   LED_OFF(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
   HAL_TIM_Base_Stop_IT(&htim12);
@@ -38,7 +54,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart) {
   __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_ORE);
   HAL_Delay(1);
-  HAL_UART_RxCpltCallback(huart);
+//  UART_RxCpltCallback(huart);
+  uart.Init(huart);
 }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
@@ -48,6 +65,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
 
 void Uart::Init(UART_HandleTypeDef *huart) {
   huart_ = huart;
+  HAL_UART_RegisterCallback(huart_, HAL_UART_RX_COMPLETE_CB_ID, UART_RxCpltCallback);
   ReceiveMessage();
 }
 
