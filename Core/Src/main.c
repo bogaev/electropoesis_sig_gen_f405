@@ -20,12 +20,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-#include "adc.h"
 #include "crc.h"
 #include "dma.h"
+#include "i2c.h"
 #include "iwdg.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -94,25 +93,21 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_ADC1_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
-  MX_TIM5_Init();
   MX_TIM8_Init();
   MX_TIM12_Init();
-  MX_TIM14_Init();
-  MX_TIM13_Init();
   MX_CRC_Init();
   MX_IWDG_Init();
-  MX_UART4_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-#ifdef THIS_IS_MAIN_MCU
-  MX_UART5_Init();
-#else
-  MX_UART4_Init();
-#endif
+//#ifdef THIS_IS_MAIN_MCU
+//  MX_UART5_Init();
+//#else
+//  MX_UART4_Init();
+//#endif
   /* USER CODE END 2 */
 
   /* Init scheduler */

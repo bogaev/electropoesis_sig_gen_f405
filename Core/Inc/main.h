@@ -58,22 +58,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define ADC1_IN2_IND2_POS_Pin GPIO_PIN_2
-#define ADC1_IN2_IND2_POS_GPIO_Port GPIOA
-#define ADC1_IN3_IND2_NEG_Pin GPIO_PIN_3
-#define ADC1_IN3_IND2_NEG_GPIO_Port GPIOA
-#define ADC1_IN6_IND4_POS_Pin GPIO_PIN_6
-#define ADC1_IN6_IND4_POS_GPIO_Port GPIOA
-#define ADC1_IN7_IND4_NEG_Pin GPIO_PIN_7
-#define ADC1_IN7_IND4_NEG_GPIO_Port GPIOA
+#define RELAY_220V_Pin GPIO_PIN_5
+#define RELAY_220V_GPIO_Port GPIOC
 #define BOOT1_Pin GPIO_PIN_2
 #define BOOT1_GPIO_Port GPIOB
-#define TEST_MODE_Pin GPIO_PIN_12
-#define TEST_MODE_GPIO_Port GPIOB
 #define LED2_UART_MSG_Pin GPIO_PIN_13
 #define LED2_UART_MSG_GPIO_Port GPIOB
-#define RELAY_220V_Pin GPIO_PIN_6
-#define RELAY_220V_GPIO_Port GPIOC
 #define IND7_POS_DMA_Pin GPIO_PIN_8
 #define IND7_POS_DMA_GPIO_Port GPIOC
 #define IND7_NEG_DMA_Pin GPIO_PIN_9
@@ -96,16 +86,12 @@ void Error_Handler(void);
 #define IND4_POS_DMA_GPIO_Port GPIOB
 #define IND4_NEG_DMA_Pin GPIO_PIN_7
 #define IND4_NEG_DMA_GPIO_Port GPIOB
-#define RESERVE_1_Pin GPIO_PIN_8
-#define RESERVE_1_GPIO_Port GPIOB
-#define RESERVE_2_Pin GPIO_PIN_9
-#define RESERVE_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 #define LED_ON(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_SET)
 #define LED_OFF(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_RESET)
 
-#define THIS_IS_MAIN_MCU
+//#define THIS_IS_MAIN_MCU
 //#define SELF_MESSAGE_ON
 
 #ifndef THIS_IS_MAIN_MCU

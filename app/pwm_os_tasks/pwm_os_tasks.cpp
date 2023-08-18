@@ -3,7 +3,7 @@
 #include "main.h"
 #include "iwdg.h"
 
-#include "app/com_interface/com_interface.h"
+//#include "app/com_interface/com_interface.h"
 #include "app/sig_gen_config.h"
 #include "app/sig_gens/sig_gens.h"
 
@@ -13,7 +13,7 @@
 #ifdef SELF_MESSAGE_ON
   #define DELAY_LED 2000
 #else
-  #define DELAY_LED 30
+//  #define DELAY_LED 30
 #endif
 
 void StartDefaultTask(void *argument) {
@@ -36,11 +36,13 @@ void StartDefaultTask(void *argument) {
   SIG_GEN_CommitChanges(&sig_gen_3);
   SIG_GEN_CommitChanges(&sig_gen_4);
 
-#ifdef THIS_IS_MAIN_MCU
-  uart.Init(&huart5);
-#else
-  uart.Init(&huart4);
-#endif
+//#ifdef THIS_IS_MAIN_MCU
+//  uart.Init(&huart5);
+//  #define DELAY_LED 1000
+//#else
+//  uart.Init(&huart4);
+//  #define DELAY_LED 2000
+//#endif
 
 //  SIG_GEN_Start(&sig_gen_1);
 //  SIG_GEN_Start(&sig_gen_2);
@@ -50,15 +52,13 @@ void StartDefaultTask(void *argument) {
 //  PauseAllChannels();
 
   for(;;) {
-    LED_ON(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
-    osDelay(500);
-    HAL_IWDG_Refresh(&hiwdg);
-    LED_OFF(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
-    osDelay(500);
-//    osDelay(5000);
+//    LED_ON(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
 //    RELAY_GROUND();
-//    osDelay(5000);
+//    osDelay(DELAY_LED);
+//    HAL_IWDG_Refresh(&hiwdg);
+//    LED_OFF(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
 //    RELAY_TRI_STATE();
+//    osDelay(DELAY_LED);
 #ifdef SELF_MESSAGE_ON
     static tdUartMessage msg = {{100, 0, 4, UART_SIGNAL_CARRIER, SIG_GEN_PARAM_FREQ, 0}, 0};
     osDelay(DELAY_LED*2);
@@ -74,34 +74,34 @@ void StartDefaultTask(void *argument) {
 * @retval None
 */
 void ChangeSignalParamsTask(void *argument) {
-  tdUartMessage msg;
+//  tdUartMessage msg;
   osStatus_t status;
 
   for(;;) {
-    status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
-    if (status == osOK) {
-      uint8_t channel = msg.data.emitter;
-      if (msg.data.type == UART_MESSAGE_DATA) {
-//        PauseAllChannels();
-//        osDelay(1);
-        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.data.signal, msg.data.param, msg.data.value);
-//        SIG_GEN_Resume(emitter_to_siggen[channel]);
-        LedPortPinTypeDef led = emitter_to_led[channel];
-        LED_ON(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+//    status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
+//    if (status == osOK) {
+//      uint8_t channel = msg.data.emitter;
+//      if (msg.data.type == UART_MESSAGE_DATA) {
+////        PauseAllChannels();
+////        osDelay(1);
+//        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.data.signal, msg.data.param, msg.data.value);
+////        SIG_GEN_Resume(emitter_to_siggen[channel]);
+//        LedPortPinTypeDef led = emitter_to_led[channel];
+//        LED_ON(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+////        RELAY_GROUND();
+//        osDelay(DELAY_LED);
+//        LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+////        RELAY_TRI_STATE();
+//        osDelay(DELAY_LED);
+//      } else if (msg.data.type == UART_MESSAGE_END) {
+//        SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
+//        osDelay(2000);
 //        RELAY_GROUND();
-        osDelay(DELAY_LED);
-        LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
-//        RELAY_TRI_STATE();
-        osDelay(DELAY_LED);
-      } else if (msg.data.type == UART_MESSAGE_END) {
-        SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
-        osDelay(2000);
-        RELAY_GROUND();
-        LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
-        HAL_TIM_Base_Start_IT(&htim12);
-      }
-    } else {
-//      Error_Handler();
-    }
+//        LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
+//        HAL_TIM_Base_Start_IT(&htim12);
+//      }
+//    } else {
+////      Error_Handler();
+//    }
   }
 }
