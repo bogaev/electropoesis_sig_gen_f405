@@ -11,5 +11,6 @@ extern "C" void Run_PWM();
 
 void ChangeSignalParamsTask(void *argument);
 void StartDefaultTask(void *argument);
+void StartI2cTestTask(void *argument);
 
 #endif // #ifndef _PWM_OS_TASKS_H_

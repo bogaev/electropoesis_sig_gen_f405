@@ -2,6 +2,11 @@
 
 #include "tim.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "main.h"
+#include "cmsis_os.h"
+
 #define SEG_GEN_INIT(N, CH1, CH2) \
   sig_gen_##N.pwm_timer = &htim##N; \
   sig_gen_##N.sample_timer = &htim12; \
@@ -56,9 +61,20 @@ std::unordered_map<int, SIG_GEN_HandleTypeDef*> emitter_to_siggen = {
 #endif
 
 void MY_SIG_GEN_Init() {
+  static UBaseType_t uxHighWaterMark;
+  static size_t minEverFreeHeapSize;
+
+  uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+  minEverFreeHeapSize = xPortGetMinimumEverFreeHeapSize();
   SEG_GEN_INIT(1, TIM_CHANNEL_1, TIM_CHANNEL_2);
+  uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+  minEverFreeHeapSize = xPortGetMinimumEverFreeHeapSize();
   SEG_GEN_INIT(2, TIM_CHANNEL_1, TIM_CHANNEL_2);
+  uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+  minEverFreeHeapSize = xPortGetMinimumEverFreeHeapSize();
   SEG_GEN_INIT(3, TIM_CHANNEL_3, TIM_CHANNEL_4);
+  uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+  minEverFreeHeapSize = xPortGetMinimumEverFreeHeapSize();
   SEG_GEN_INIT(4, TIM_CHANNEL_1, TIM_CHANNEL_2);
   HAL_TIM_Base_Start_IT(&htim12);
 }

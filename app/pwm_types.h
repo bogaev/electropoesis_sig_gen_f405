@@ -6,10 +6,10 @@
 const int EMITTERS_NUM = 8;
 
 typedef enum {
-  UART_SIGNAL_CARRIER = 0,
-  UART_SIGNAL_AMP_MOD,
-  UART_SIGNAL_FREQ_MOD,
-  UART_SIGNAL_NUM
+  RPI_SIGNAL_CARRIER = 0,
+  RPI_SIGNAL_AMP_MOD,
+  RPI_SIGNAL_FREQ_MOD,
+  RPI_SIGNAL_NUM
 } enPwmSignals;
 
 typedef enum {
@@ -22,16 +22,16 @@ typedef enum {
 } tdSignalTypes;
 
 //typedef enum {
-//  UART_PARAM_SIGNAL_TYPE = 0,
-//  UART_PARAM_AMP,
-//  UART_PARAM_FREQ,
-//  UART_PARAM_NUM
+//  RPI_PARAM_SIGNAL_TYPE = 0,
+//  RPI_PARAM_AMP,
+//  RPI_PARAM_FREQ,
+//  RPI_PARAM_NUM
 //} enSignalParams;
 
 typedef enum {
-  UART_MESSAGE_DATA = 0,
-  UART_MESSAGE_START,
-  UART_MESSAGE_END
+  RPI_MESSAGE_DATA = 0,
+  RPI_MESSAGE_START,
+  RPI_MESSAGE_END
 } tdMessageType;
 
 typedef struct {
@@ -43,8 +43,9 @@ typedef struct {
 } tdPwmData;
 
 typedef struct {
-//  uint32_t crc = 0;
-  tdPwmData data = {0};
-} tdUartMessage;
+  uint32_t crc = 0;
+//  tdPwmData data = {0};
+  uint32_t data = 0xDEADBEEF;
+} tdRpiMessage;
 
 #endif // #ifndef _PWM_TYPES_H_

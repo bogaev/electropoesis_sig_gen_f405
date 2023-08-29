@@ -1,28 +1,31 @@
 #ifndef _COM_INTERFACE_H_
 #define _COM_INTERFACE_H_
 
-#include "usart.h"
+#include "main.h"
 #include "cmsis_os.h"
 #include "app/pwm_types.h"
+#include "boost/crc.hpp"
 
-extern UART_HandleTypeDef huart5;
-extern CRC_HandleTypeDef hcrc;
 extern osMessageQueueId_t SignalGeneratorQueueHandle;
-extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
-extern "C" void UartStart(UART_HandleTypeDef *huart);
 
-class Uart {
+class ComInterface {
 public:
-  void Init(UART_HandleTypeDef *huart);
-  HAL_StatusTypeDef ReceiveMessage();
-  void ReadMessage();
+  virtual HAL_StatusTypeDef TransmitMessage(uint16_t target_addr,
+                                            uint32_t data) = 0;
+  virtual HAL_StatusTypeDef ReceiveMessage() = 0;
 
-private:
-  UART_HandleTypeDef* huart_;
-  tdUartMessage message;
-  static void UART_RxCpltCallback(UART_HandleTypeDef *huart);
+protected:
+  ComInterface() = default;
+
+  ComInterface(osMessageQueueId_t queue)
+    : queue_(queue)
+  {}
+
+  virtual void ReadMessage() = 0;
+
+  osMessageQueueId_t queue_ = SignalGeneratorQueueHandle;
+  boost::crc_32_type crc32_{};
+  tdRpiMessage msg_{};
 };
-
-extern Uart uart;
 
 #endif // #ifndef _COM_INTERFACE_H_

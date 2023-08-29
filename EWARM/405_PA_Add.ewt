@@ -1441,10 +1441,13 @@
                 <group>
                     <name>com_interface</name>
                     <file>
-                        <name>$PROJ_DIR$\..\app\com_interface\com_interface.cpp</name>
+                        <name>$PROJ_DIR$\..\app\com_interface\com_interface.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\app\com_interface\com_interface.h</name>
+                        <name>$PROJ_DIR$\..\app\com_interface\com_interface_i2c.cpp</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\app\com_interface\com_interface_i2c.h</name>
                     </file>
                 </group>
                 <group>

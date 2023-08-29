@@ -6,6 +6,7 @@
 //#include "app/com_interface/com_interface.h"
 #include "app/sig_gen_config.h"
 #include "app/sig_gens/sig_gens.h"
+#include "app/com_interface/com_interface_i2c.h"
 
 #include "signal_generator/pwm_controller.h"
 #include "signal_generator/sig_gen_include.h"
@@ -13,11 +14,13 @@
 #ifdef SELF_MESSAGE_ON
   #define DELAY_LED 2000
 #else
-//  #define DELAY_LED 30
+  #define DELAY_LED 300
 #endif
 
 void StartDefaultTask(void *argument) {
   /* Infinite loop */
+  static UBaseType_t uxHighWaterMark2;
+  static size_t minEverFreeHeapSize2;
 
   MY_SIG_GEN_Init();
 
@@ -36,6 +39,7 @@ void StartDefaultTask(void *argument) {
   SIG_GEN_CommitChanges(&sig_gen_3);
   SIG_GEN_CommitChanges(&sig_gen_4);
 
+  I2cStart(&hi2c1);
 //#ifdef THIS_IS_MAIN_MCU
 //  uart.Init(&huart5);
 //  #define DELAY_LED 1000
@@ -52,13 +56,17 @@ void StartDefaultTask(void *argument) {
 //  PauseAllChannels();
 
   for(;;) {
-//    LED_ON(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
+    LED_ON(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
 //    RELAY_GROUND();
-//    osDelay(DELAY_LED);
-//    HAL_IWDG_Refresh(&hiwdg);
-//    LED_OFF(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
+    osDelay(DELAY_LED);
+    HAL_IWDG_Refresh(&hiwdg);
+    LED_OFF(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
 //    RELAY_TRI_STATE();
-//    osDelay(DELAY_LED);
+    osDelay(DELAY_LED);
+
+    uxHighWaterMark2 = uxTaskGetStackHighWaterMark( NULL );
+    minEverFreeHeapSize2 = xPortGetMinimumEverFreeHeapSize();
+
 #ifdef SELF_MESSAGE_ON
     static tdUartMessage msg = {{100, 0, 4, UART_SIGNAL_CARRIER, SIG_GEN_PARAM_FREQ, 0}, 0};
     osDelay(DELAY_LED*2);
@@ -74,11 +82,25 @@ void StartDefaultTask(void *argument) {
 * @retval None
 */
 void ChangeSignalParamsTask(void *argument) {
-//  tdUartMessage msg;
+  tdRpiMessage msg;
   osStatus_t status;
 
+  static UBaseType_t uxHighWaterMark3;
+  static size_t minEverFreeHeapSize3;
+
   for(;;) {
-//    status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
+    static uint32_t currentItemsGet = osMessageQueueGetCount(SignalGeneratorQueueHandle);
+    status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
+    currentItemsGet = osMessageQueueGetCount(SignalGeneratorQueueHandle);
+
+    LED_ON(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+    osDelay(100);
+    LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+    osDelay(100);
+
+    uxHighWaterMark3 = uxTaskGetStackHighWaterMark( NULL );
+    minEverFreeHeapSize3 = xPortGetMinimumEverFreeHeapSize();
+
 //    if (status == osOK) {
 //      uint8_t channel = msg.data.emitter;
 //      if (msg.data.type == UART_MESSAGE_DATA) {
@@ -104,4 +126,35 @@ void ChangeSignalParamsTask(void *argument) {
 ////      Error_Handler();
 //    }
   }
+}
+
+void StartI2cTestTask(void *argument) {
+//  tdRpiMessage msg;
+//  msg.data.type = RPI_MESSAGE_START;
+//  msg.data.emitter = 0x11;
+//  msg.data.signal = 0x22;
+//  msg.data.param = 0x33;
+//  msg.data.value = 0x44;
+//  msg.data = RPI_MESSAGE_START;
+  static UBaseType_t uxHighWaterMark4;
+  static size_t minEverFreeHeapSize4;
+
+  /* USER CODE BEGIN StartI2cTestTask */
+  /* Infinite loop */
+  for(;;)
+  {
+#ifdef THIS_IS_MAIN_MCU
+    osDelay(DELAY_LED);
+    LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+    i2c->TransmitMessage(0x0055, 0xDEADBEEF);
+    osDelay(DELAY_LED);
+    LED_ON(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+
+    uxHighWaterMark4 = uxTaskGetStackHighWaterMark( NULL );
+    minEverFreeHeapSize4 = xPortGetMinimumEverFreeHeapSize();
+#else
+//    i2c.TransmitMessage(0x00AA, msg);
+#endif
+  }
+  /* USER CODE END StartI2cTestTask */
 }

@@ -95,9 +95,14 @@ void Error_Handler(void);
 //#define SELF_MESSAGE_ON
 
 #ifndef THIS_IS_MAIN_MCU
-#define RELAY_220V_Pin GPIO_PIN_2
-#define RELAY_220V_GPIO_Port GPIOC
+  #define RELAY_220V_Pin GPIO_PIN_2
+  #define RELAY_220V_GPIO_Port GPIOC
+  #define LED1_HARD_FAULT_Pin GPIO_PIN_13
+  #define LED1_HARD_FAULT_GPIO_Port GPIOB
+  #define LED2_UART_MSG_Pin GPIO_PIN_10
+  #define LED2_UART_MSG_GPIO_Port GPIOA
 #endif
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

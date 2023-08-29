@@ -29,7 +29,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "app/com_interface/com_interface_i2c.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,8 +56,7 @@
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
-//void SignalGeneratorTest();
-extern void UartStart();
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -103,11 +102,6 @@ int main(void)
   MX_IWDG_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-//#ifdef THIS_IS_MAIN_MCU
-//  MX_UART5_Init();
-//#else
-//  MX_UART4_Init();
-//#endif
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -211,6 +205,7 @@ void Error_Handler(void)
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   LED_ON(LED1_HARD_FAULT_GPIO_Port, LED1_HARD_FAULT_Pin);
+  LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
   LED_OFF(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
   while (1)
   {
