@@ -62,13 +62,6 @@ const osThreadAttr_t ChngSignalParam_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for I2cTestTask */
-osThreadId_t I2cTestTaskHandle;
-const osThreadAttr_t I2cTestTask_attributes = {
-  .name = "I2cTestTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
 /* Definitions for SignalGeneratorQueue */
 osMessageQueueId_t SignalGeneratorQueueHandle;
 const osMessageQueueAttr_t SignalGeneratorQueue_attributes = {
@@ -82,7 +75,6 @@ const osMessageQueueAttr_t SignalGeneratorQueue_attributes = {
 
 void StartDefaultTask(void *argument);
 void ChangeSignalParamsTask(void *argument);
-void StartI2cTestTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -122,9 +114,6 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of ChngSignalParam */
   ChngSignalParamHandle = osThreadNew(ChangeSignalParamsTask, NULL, &ChngSignalParam_attributes);
-
-  /* creation of I2cTestTask */
-  I2cTestTaskHandle = osThreadNew(StartI2cTestTask, NULL, &I2cTestTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -170,24 +159,6 @@ __weak void ChangeSignalParamsTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END ChangeSignalParamsTask */
-}
-
-/* USER CODE BEGIN Header_StartI2cTestTask */
-/**
-* @brief Function implementing the I2cTestTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartI2cTestTask */
-__weak void StartI2cTestTask(void *argument)
-{
-  /* USER CODE BEGIN StartI2cTestTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartI2cTestTask */
 }
 
 /* Private application code --------------------------------------------------*/

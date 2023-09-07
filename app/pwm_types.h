@@ -29,9 +29,9 @@ typedef enum {
 //} enSignalParams;
 
 typedef enum {
-  RPI_MESSAGE_DATA = 0,
-  RPI_MESSAGE_START,
-  RPI_MESSAGE_END
+  COM_MESSAGE_DATA = 0,
+  COM_MESSAGE_START,
+  COM_MESSAGE_END
 } tdMessageType;
 
 typedef struct {
@@ -44,8 +44,8 @@ typedef struct {
 
 typedef struct {
   uint32_t crc = 0;
-//  tdPwmData data = {0};
-  uint32_t data = 0xDEADBEEF;
+  tdPwmData data = {0};
+//  uint32_t data = 0xDEADBEEF;
 } tdRpiMessage;
 
 #endif // #ifndef _PWM_TYPES_H_
