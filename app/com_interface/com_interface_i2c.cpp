@@ -18,11 +18,11 @@ void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, ui
 }
 
 void I2cInterface::RPI_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
-  std::cout << "RPI_MasterTxCpltCallback" << std::endl;
+//  std::cout << "RPI_MasterTxCpltCallback" << std::endl;
 }
 
 void I2cInterface::RPI_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
-  std::cout << "RPI_MasterRxCpltCallback" << std::endl;
+//  std::cout << "RPI_MasterRxCpltCallback" << std::endl;
 }
 
 void I2cInterface::RPI_SlaveTxCpltCallback(I2C_HandleTypeDef *hi2c) {
@@ -65,6 +65,9 @@ void I2cInterface::Init(I2C_HandleTypeDef *hi2c,
                         enI2cMode mode) {
   assert(hi2c);
   assert(addr);
+//  std::cout << "MSG_TOTAL_SIZE_: " << std::to_string(MSG_TOTAL_SIZE_) << "\n";
+//  std::cout << "sizeof(tdRpiMessage): " << std::to_string(sizeof(tdRpiMessage)) << "\n";
+//  std::cout << "alignof: " << std::to_string(alignof(tdRpiMessage)) << std::endl;
 
   hi2c_ = hi2c;
   addr_ = addr;
@@ -97,17 +100,17 @@ void I2cInterface::ReInit() {
 }
 
 HAL_StatusTypeDef I2cInterface::TransmitMessage(uint16_t target_addr, uint32_t data) {
-  return HAL_I2C_Master_Transmit_IT(hi2c_, target_addr, (uint8_t*)&msg_, sizeof(tdRpiMessage));
+  return HAL_I2C_Master_Transmit_IT(hi2c_, target_addr, (uint8_t*)&msg_, MSG_TOTAL_SIZE_);
 }
 
 void I2cInterface::GetMessageFromMaster() {
 //  std::cout << "GetMessageFromMaster" << std::endl;
-  HAL_I2C_Slave_Seq_Receive_IT(&hi2c1, (uint8_t*)&msg_, sizeof(tdRpiMessage), I2C_FIRST_FRAME);
+  HAL_I2C_Slave_Seq_Receive_IT(&hi2c1, (uint8_t*)&msg_, MSG_TOTAL_SIZE_, I2C_FIRST_AND_NEXT_FRAME);
 }
 
 void I2cInterface::AnswerBackToMaster() {
 //  std::cout << "AnswerBackToMaster" << std::endl;
-  HAL_I2C_Slave_Seq_Transmit_IT(&hi2c1, (uint8_t*)&com_status_, sizeof(com_status_), I2C_LAST_FRAME);
+  HAL_I2C_Slave_Seq_Transmit_IT(&hi2c1, (uint8_t*)&com_status_, MSG_ANSWER_SIZE, I2C_LAST_FRAME);
 }
 
 HAL_StatusTypeDef I2cInterface::WaitNextMessage() {
@@ -119,7 +122,7 @@ void I2cInterface::ReadMessage() {
 //  std::cout << "ReadMessage" << std::endl;
   boost::crc_32_type crc32{};
   crc32.reset();
-  crc32.process_bytes( &msg_.data, sizeof(msg_.data) );
+  crc32.process_bytes( &msg_.data, MSG_DATA_SIZE_ );
 
   if (crc32.checksum() != msg_.crc) {
     SetStatus(COM_STATUS_CRC_ERR);
@@ -134,11 +137,11 @@ void I2cInterface::ReadMessage() {
       osStatus_t status = osMessageQueuePut(queue_, (void*)&msg_, 0U, 0U);
   //    currentItemsPut = osMessageQueueGetCount(queue_);
     if(status != osOK) {
+      osMessageQueueReset(queue_);
       SetStatus(COM_STATUS_OS_ERR);
       return;
     }
   }
-
   SetStatus(COM_STATUS_OK);
 }
 

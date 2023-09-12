@@ -29,23 +29,21 @@ typedef enum {
 //} enSignalParams;
 
 typedef enum {
-  COM_MESSAGE_DATA = 0,
-  COM_MESSAGE_START,
-  COM_MESSAGE_END
+  COM_MSG_CHANGE_PARAM = 0,
+  COM_MSG_COMMIT
 } tdMessageType;
 
 typedef struct {
-  uint8_t type;
-  uint8_t emitter;
-  uint8_t signal;
-  uint8_t param;
-  uint16_t value;
+  uint32_t type:4;
+  uint32_t emitter:4;
+  uint32_t signal:4;
+  uint32_t param:4;
+  uint32_t value:16;
 } tdPwmData;
 
 typedef struct {
   uint32_t crc = 0;
   tdPwmData data = {0};
-//  uint32_t data = 0xDEADBEEF;
 } tdRpiMessage;
 
 #endif // #ifndef _PWM_TYPES_H_

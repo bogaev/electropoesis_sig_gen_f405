@@ -91,7 +91,7 @@ void Error_Handler(void);
 #define LED_ON(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_SET)
 #define LED_OFF(PORT, PIN) HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_RESET)
 
-//#define THIS_IS_MAIN_MCU
+#define THIS_IS_MAIN_MCU
 //#define SELF_MESSAGE_ON
 
 #ifndef THIS_IS_MAIN_MCU

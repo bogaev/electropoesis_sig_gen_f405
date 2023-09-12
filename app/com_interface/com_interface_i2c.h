@@ -14,7 +14,6 @@ typedef enum {
 
 #ifdef THIS_IS_MAIN_MCU
   constexpr uint16_t _I2C_OWN_ADDR_ = 0x00AA;
-//  constexpr enI2cMode _I2C_MODE_ = I2C_MODE_MASTER;
   constexpr enI2cMode _I2C_MODE_ = I2C_MODE_SLAVE;
 #else
   constexpr uint16_t _I2C_OWN_ADDR_ = 0x0055;
@@ -33,6 +32,10 @@ public:
   void RPI_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, uint16_t AddrMatchCode);
 
 private:
+  static constexpr uint8_t MSG_TOTAL_SIZE_ = sizeof(tdRpiMessage);
+  static constexpr uint8_t MSG_DATA_SIZE_ = sizeof(tdPwmData);
+  static constexpr uint8_t MSG_ANSWER_SIZE = 1;
+
   virtual void ReadMessage() override;
   virtual void SetStatus(enComStatus com_status) override;
 

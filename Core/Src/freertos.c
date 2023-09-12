@@ -102,7 +102,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* creation of SignalGeneratorQueue */
-  SignalGeneratorQueueHandle = osMessageQueueNew (40, sizeof(tdRpiMessage), &SignalGeneratorQueue_attributes);
+  SignalGeneratorQueueHandle = osMessageQueueNew (80, sizeof(tdRpiMessage), &SignalGeneratorQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */

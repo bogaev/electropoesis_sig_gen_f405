@@ -3,7 +3,6 @@
 #include "main.h"
 #include "iwdg.h"
 
-//#include "app/com_interface/com_interface.h"
 #include "app/sig_gen_config.h"
 #include "app/sig_gens/sig_gens.h"
 #include "app/com_interface/com_interface_i2c.h"
@@ -14,7 +13,7 @@
 #ifdef SELF_MESSAGE_ON
   #define DELAY_LED 2000
 #else
-  #define DELAY_LED 200
+  #define DELAY_LED 1
 #endif
 
 void StartDefaultTask(void *argument) {
@@ -24,20 +23,20 @@ void StartDefaultTask(void *argument) {
 
   MY_SIG_GEN_Init();
 
-  SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-  SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-  SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-  SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-
-  SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_CARRIER, 111);
-  SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_CARRIER, 122);
-  SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 133);
-  SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_CARRIER, 144);
-
-  SIG_GEN_CommitChanges(&sig_gen_1);
-  SIG_GEN_CommitChanges(&sig_gen_2);
-  SIG_GEN_CommitChanges(&sig_gen_3);
-  SIG_GEN_CommitChanges(&sig_gen_4);
+//  SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//  SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//  SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//  SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
+//
+//  SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_CARRIER, 111);
+//  SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_CARRIER, 122);
+//  SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 133);
+//  SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_CARRIER, 144);
+//
+//  SIG_GEN_CommitChanges(&sig_gen_1);
+//  SIG_GEN_CommitChanges(&sig_gen_2);
+//  SIG_GEN_CommitChanges(&sig_gen_3);
+//  SIG_GEN_CommitChanges(&sig_gen_4);
 
   I2cStart(&hi2c1);
 
@@ -77,27 +76,37 @@ void ChangeSignalParamsTask(void *argument) {
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
 //    currentItemsGet = osMessageQueueGetCount(SignalGeneratorQueueHandle);
 
-    LED_ON(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
-    osDelay(DELAY_LED);
-    LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
-    osDelay(DELAY_LED);
-
     uxHighWaterMark3 = uxTaskGetStackHighWaterMark( NULL );
     minEverFreeHeapSize3 = xPortGetMinimumEverFreeHeapSize();
 
 //    if (status == osOK) {
 //      uint8_t channel = msg.data.emitter;
-//      if (msg.data.type == COM_MESSAGE_DATA) {
-//        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.data.signal, msg.data.param, msg.data.value);
-//      } else if (msg.data.type == COM_MESSAGE_END) {
-//        SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
-//        osDelay(2000);
-//        RELAY_GROUND();
+//      if (msg.data.type == COM_MSG_CHANGE_PARAM) {
+//        LED_ON(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+//        osDelay(DELAY_LED);
+//        LED_OFF(LED2_UART_MSG_GPIO_Port, LED2_UART_MSG_Pin);
+//        osDelay(DELAY_LED);
+//      } else if (msg.data.type == COM_MSG_COMMIT) {
 //        LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
-//        HAL_TIM_Base_Start_IT(&htim12);
+//        osDelay(DELAY_LED);
+//        LED_OFF(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
+//        osDelay(DELAY_LED);
 //      }
-//    } else {
-//      Error_Handler();
 //    }
+
+    if (status == osOK) {
+      uint8_t channel = msg.data.emitter;
+      if (msg.data.type == COM_MSG_CHANGE_PARAM) {
+        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.data.signal, msg.data.param, msg.data.value);
+      } else if (msg.data.type == COM_MSG_COMMIT) {
+        SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
+        osDelay(1000);
+        RELAY_GROUND();
+        LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
+        HAL_TIM_Base_Start_IT(&htim12);
+      }
+    } else {
+      Error_Handler();
+    }
   }
 }
