@@ -29,8 +29,12 @@ typedef enum {
 //} enSignalParams;
 
 typedef enum {
-  COM_MSG_CHANGE_PARAM = 0,
-  COM_MSG_COMMIT
+  COM_MSG_PAUSE_ALL = 0,
+  COM_MSG_CHECK_MCU_READY,
+  COM_MSG_CHANGE_PARAM,
+  COM_MSG_COMMIT,
+  COM_MSG_RELAY_ON,
+  COM_MSG_RELAY_OFF
 } tdMessageType;
 
 typedef struct {
