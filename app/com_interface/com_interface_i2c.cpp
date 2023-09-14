@@ -31,9 +31,9 @@ void I2cInterface::RPI_SlaveTxCpltCallback(I2C_HandleTypeDef *hi2c) {
 
 void I2cInterface::RPI_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 //  std::cout << "RPI_SlaveRxCpltCallback" << std::endl;
-  RELAY_TRI_STATE();
-  LED_OFF(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
-  HAL_TIM_Base_Stop_IT(&htim12);
+//  RELAY_TRI_STATE();
+//  LED_OFF(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
+//  HAL_TIM_Base_Stop_IT(&htim12);
   i2c->ReadMessage();
   i2c->WaitNextMessage();
 }
@@ -128,11 +128,6 @@ void I2cInterface::ReadMessage() {
     SetStatus(COM_STATUS_CRC_ERR);
     return;
   } else {
-  //    if (!emitter_to_siggen.count(msg_.data.emitter)) {
-  ////      RELAY_TRI_STATE();
-  ////      PauseAllChannels();
-  //      return;
-  //    }
   //    static uint32_t currentItemsPut = osMessageQueueGetCount(queue_);
       osStatus_t status = osMessageQueuePut(queue_, (void*)&msg_, 0U, 0U);
   //    currentItemsPut = osMessageQueueGetCount(queue_);

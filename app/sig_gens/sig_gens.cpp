@@ -7,6 +7,23 @@
 #include "main.h"
 #include "cmsis_os.h"
 
+const SIG_GEN_RangeCoeff corr_amp[] = {
+  {.from = 0, .to = 3, .coeff = 1.0}
+};
+
+const SIG_GEN_RangeCoeff corr_freq[] = {
+  {.from = 0, .to = 200, .coeff = 1},
+  {.from = 200, .to = 500, .coeff = 1.1},
+  {.from = 500, .to = CARRIER_FREQ_MAX_HZ, .coeff = 1.2}
+};
+
+SIG_GEN_CoeffsInitStruct corr_coeff = {
+  corr_amp,
+  1,
+  corr_freq,
+  3
+};
+
 #define SEG_GEN_INIT(N, CH1, CH2) \
   sig_gen_##N.pwm_timer = &htim##N; \
   sig_gen_##N.sample_timer = &htim12; \
@@ -14,9 +31,9 @@
   sig_gen_##N.channels[0] = CH1; \
   sig_gen_##N.channels[1] = CH2; \
   sig_gen_##N.min_duty_cycle_percent = 53; \
-  sig_gen_##N.max_duty_cycle_percent = 67; \
+  sig_gen_##N.max_duty_cycle_percent = 68; \
   sig_gen_##N.dead_time_th_percent = 20; \
-  sig_gen_##N.coeffs = 0; \
+  sig_gen_##N.coeffs = &corr_coeff; \
   if (SIG_GEN_Init(&sig_gen_##N) != SIG_GEN_OK) { \
     Error_Handler(); \
   }
@@ -79,8 +96,8 @@ void MY_SIG_GEN_Init() {
   HAL_TIM_Base_Start_IT(&htim12);
 }
 
-void PauseAllChannels() {
-  for (const auto& sig_gen : emitter_to_siggen) {
-    SIG_GEN_Pause(sig_gen.second);
-  }
-}
+//void PauseAllChannels() {
+//  for (const auto& sig_gen : emitter_to_siggen) {
+//    SIG_GEN_Pause(sig_gen.second);
+//  }
+//}

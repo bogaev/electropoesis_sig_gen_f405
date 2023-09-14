@@ -12,18 +12,18 @@ extern "C" {
 typedef enum {
   SIG_GEN_DMA_MODE = 0,
   SIG_GEN_IT_MODE,
-  SIG_GEN_MODE_NUM                       
+  SIG_GEN_MODE_NUM
 } SIG_GEN_ModeTypeDef;
 
 typedef enum {
   SIG_GEN_OK = 0,
-  SIG_GEN_ERROR_PWM_TIMER_NOT_SET,        
-  SIG_GEN_ERROR_SAMPLE_RATE_NOT_SET,       
+  SIG_GEN_ERROR_PWM_TIMER_NOT_SET,
+  SIG_GEN_ERROR_SAMPLE_RATE_NOT_SET,
   SIG_GEN_ERROR_SAMPLE_RATE_LESS_THAN_FREQ,
-  SIG_GEN_ERROR_AMPLITUDE_VALUE_ABOVE_MAX, 
-  SIG_GEN_ERROR_PWM_NOT_INITED,            
-  SIG_GEN_ERROR_INCORRECT_BOUNDS,          
-  SIG_GEN_ERROR_NUM                       
+  SIG_GEN_ERROR_AMPLITUDE_VALUE_ABOVE_MAX,
+  SIG_GEN_ERROR_PWM_NOT_INITED,
+  SIG_GEN_ERROR_INCORRECT_BOUNDS,
+  SIG_GEN_ERROR_NUM
 } SIG_GEN_StatusTypeDef;
 
 typedef enum {
@@ -58,9 +58,9 @@ typedef struct {
 } SIG_GEN_RangeCoeff;
 
 typedef struct {
-  SIG_GEN_RangeCoeff* amp_array;
+  const SIG_GEN_RangeCoeff* amp_array;
   uint32_t amp_array_size;
-  SIG_GEN_RangeCoeff* freq_array;
+  const SIG_GEN_RangeCoeff* freq_array;
   uint32_t freq_array_size;
 } SIG_GEN_CoeffsInitStruct;
 
