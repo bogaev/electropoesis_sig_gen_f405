@@ -30,14 +30,16 @@ public:
                                             uint32_t data) override;
   virtual HAL_StatusTypeDef WaitNextMessage() override;
   void RPI_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, uint16_t AddrMatchCode);
+  virtual void SetStatus(const ComAnswer& answer) override;
 
 private:
   static constexpr uint8_t MSG_TOTAL_SIZE_ = sizeof(tdRpiMessage);
   static constexpr uint8_t MSG_DATA_SIZE_ = sizeof(tdPwmData);
-  static constexpr uint8_t MSG_ANSWER_SIZE = 1;
+  static constexpr uint8_t MSG_ANSWER_SIZE = 2;
 
   virtual void ReadMessage() override;
-  virtual void SetStatus(enComStatus com_status) override;
+
+  ComAnswer ReadData();
 
   void ReInit();
   void GetMessageFromMaster();

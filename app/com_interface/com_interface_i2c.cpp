@@ -110,7 +110,7 @@ void I2cInterface::GetMessageFromMaster() {
 
 void I2cInterface::AnswerBackToMaster() {
 //  std::cout << "AnswerBackToMaster" << std::endl;
-  HAL_I2C_Slave_Seq_Transmit_IT(&hi2c1, (uint8_t*)&com_status_, MSG_ANSWER_SIZE, I2C_LAST_FRAME);
+  HAL_I2C_Slave_Seq_Transmit_IT(&hi2c1, (uint8_t*)&answer_, MSG_ANSWER_SIZE, I2C_LAST_FRAME);
 }
 
 HAL_StatusTypeDef I2cInterface::WaitNextMessage() {
@@ -120,26 +120,38 @@ HAL_StatusTypeDef I2cInterface::WaitNextMessage() {
 
 void I2cInterface::ReadMessage() {
 //  std::cout << "ReadMessage" << std::endl;
+  ComAnswer answer{};
   boost::crc_32_type crc32{};
   crc32.reset();
   crc32.process_bytes( &msg_.data, MSG_DATA_SIZE_ );
 
   if (crc32.checksum() != msg_.crc) {
-    SetStatus(COM_STATUS_CRC_ERR);
-    return;
+    answer = { COM_STATUS_CRC_ERR, MCU_STATUS_ERR };
   } else {
+    answer = ReadData();
+  }
+  SetStatus(answer);
+}
+
+void I2cInterface::SetStatus(const ComAnswer& answer) {
+  answer_ = answer;
+}
+
+ComAnswer I2cInterface::ReadData() {
+  if (msg_.data.type != COM_MSG_CHECK_MCU_STATUS) {
   //    static uint32_t currentItemsPut = osMessageQueueGetCount(queue_);
-      osStatus_t status = osMessageQueuePut(queue_, (void*)&msg_, 0U, 0U);
+      osStatus_t status = osMessageQueuePut(queue_, (void*)&msg_.data, 0U, 0U);
   //    currentItemsPut = osMessageQueueGetCount(queue_);
     if(status != osOK) {
       osMessageQueueReset(queue_);
-      SetStatus(COM_STATUS_OS_ERR);
-      return;
+      return { COM_STATUS_OS_ERR, MCU_STATUS_ERR };
     }
+    return { COM_STATUS_OK, answer_.mcu_status };
   }
-  SetStatus(COM_STATUS_OK);
-}
 
-void I2cInterface::SetStatus(enComStatus com_status) {
-  com_status_ = com_status;
+  if (msg_.data.type == COM_MSG_CHECK_MCU_STATUS) {
+    return { COM_STATUS_OK, answer_.mcu_status };
+  }
+
+  return { COM_STATUS_ERR, MCU_STATUS_ERR };
 }

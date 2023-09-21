@@ -68,7 +68,7 @@ void StartDefaultTask(void *argument) {
 * @retval None
 */
 void ChangeSignalParamsTask(void *argument) {
-  tdRpiMessage msg;
+  tdPwmData data;
   osStatus_t status;
 
   static UBaseType_t uxHighWaterMark3;
@@ -76,22 +76,40 @@ void ChangeSignalParamsTask(void *argument) {
 
   for(;;) {
 //    static uint32_t currentItemsGet = osMessageQueueGetCount(SignalGeneratorQueueHandle);
-    status = osMessageQueueGet(SignalGeneratorQueueHandle, &msg, NULL, osWaitForever);
+    status = osMessageQueueGet(SignalGeneratorQueueHandle, &data, NULL, osWaitForever);
 //    currentItemsGet = osMessageQueueGetCount(SignalGeneratorQueueHandle);
 
     uxHighWaterMark3 = uxTaskGetStackHighWaterMark( NULL );
     minEverFreeHeapSize3 = xPortGetMinimumEverFreeHeapSize();
 
     if (status == osOK) {
-      uint8_t channel = msg.data.emitter;
-      if (msg.data.type == COM_MSG_CHANGE_PARAM) {
-        SIG_GEN_SetSignal(emitter_to_siggen[channel], msg.data.signal, msg.data.param, msg.data.value);
-      } else if (msg.data.type == COM_MSG_COMMIT) {
+      uint8_t channel = data.emitter;
+      if (data.type == COM_MSG_CHANGE_PARAM) {
+        SIG_GEN_SetSignal(emitter_to_siggen[channel], data.signal, data.param, data.value);
+      } else if (data.type == COM_MSG_COMMIT) {
         SIG_GEN_CommitChanges(emitter_to_siggen[channel]);
-//        osDelay(1000);
-//        RELAY_GROUND();
-//        LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
-//        HAL_TIM_Base_Start_IT(&htim12);
+      } else if (data.type == COM_MSG_RELAY_ON) {
+        SIG_GEN_Pause(&sig_gen_1);
+        SIG_GEN_Pause(&sig_gen_2);
+        SIG_GEN_Pause(&sig_gen_3);
+        SIG_GEN_Pause(&sig_gen_4);
+        osDelay(200);
+        RELAY_GROUND();
+        LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
+        osDelay(200);
+        i2c->SetStatus({COM_STATUS_OK, MCU_STATUS_RELAY_ON});
+      } else if (data.type == COM_MSG_RESUME) {
+        SIG_GEN_Resume(&sig_gen_1);
+        SIG_GEN_Resume(&sig_gen_2);
+        SIG_GEN_Resume(&sig_gen_3);
+        SIG_GEN_Resume(&sig_gen_4);
+        i2c->SetStatus({COM_STATUS_OK, MCU_STATUS_RESUME});
+      } else if (data.type == COM_MSG_PAUSE) {
+        SIG_GEN_Pause(&sig_gen_1);
+        SIG_GEN_Pause(&sig_gen_2);
+        SIG_GEN_Pause(&sig_gen_3);
+        SIG_GEN_Pause(&sig_gen_4);
+        i2c->SetStatus({COM_STATUS_OK, MCU_STATUS_PAUSE});
       }
     } else {
       Error_Handler();

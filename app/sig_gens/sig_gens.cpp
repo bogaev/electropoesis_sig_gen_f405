@@ -8,21 +8,30 @@
 #include "cmsis_os.h"
 
 const SIG_GEN_RangeCoeff corr_amp[] = {
-  {.from = 0, .to = 3, .coeff = 1.0}
+  { .from = 0, .to = 2, .coeff = 100.0 }
 };
 
 const SIG_GEN_RangeCoeff corr_freq[] = {
-  {.from = 0, .to = 200, .coeff = 1},
-  {.from = 200, .to = 500, .coeff = 1.1},
-  {.from = 500, .to = CARRIER_FREQ_MAX_HZ, .coeff = 1.2}
+  { .from = 0, .to = 100, .coeff = 97 },
+  { .from = 100, .to = 150, .coeff = 100 },
+  { .from = 150, .to = 200, .coeff = 103 },
+  { .from = 200, .to = 250, .coeff = 108 },
+  { .from = 250, .to = 300, .coeff = 110 },
+  { .from = 300, .to = 400, .coeff = 113 },
+  { .from = 400, .to = 450, .coeff = 118 },
+  { .from = 450, .to = 600, .coeff = 125 },
+  { .from = 600, .to = 800, .coeff = 140 },
+  { .from = 800, .to = 900, .coeff = 165 },
+  { .from = 900, .to = CARRIER_FREQ_MAX_HZ, .coeff = 185 }
 };
 
 SIG_GEN_CoeffsInitStruct corr_coeff = {
   corr_amp,
   1,
   corr_freq,
-  3
+  11
 };
+//  sig_gen_##N.max_duty_cycle_percent = 68; \
 
 #define SEG_GEN_INIT(N, CH1, CH2) \
   sig_gen_##N.pwm_timer = &htim##N; \
@@ -95,9 +104,3 @@ void MY_SIG_GEN_Init() {
   SEG_GEN_INIT(4, TIM_CHANNEL_1, TIM_CHANNEL_2);
   HAL_TIM_Base_Start_IT(&htim12);
 }
-
-//void PauseAllChannels() {
-//  for (const auto& sig_gen : emitter_to_siggen) {
-//    SIG_GEN_Pause(sig_gen.second);
-//  }
-//}
