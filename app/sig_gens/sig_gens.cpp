@@ -17,9 +17,10 @@ const SIG_GEN_RangeCoeff corr_freq[] = {
   { .from = 150, .to = 200, .coeff = 103 },
   { .from = 200, .to = 250, .coeff = 108 },
   { .from = 250, .to = 300, .coeff = 110 },
-  { .from = 300, .to = 400, .coeff = 113 },
-  { .from = 400, .to = 450, .coeff = 118 },
-  { .from = 450, .to = 600, .coeff = 125 },
+  { .from = 300, .to = 350, .coeff = 115 },
+  { .from = 350, .to = 450, .coeff = 125 },
+  { .from = 450, .to = 500, .coeff = 130 },
+  { .from = 500, .to = 600, .coeff = 135 },
   { .from = 600, .to = 800, .coeff = 140 },
   { .from = 800, .to = 900, .coeff = 165 },
   { .from = 900, .to = CARRIER_FREQ_MAX_HZ, .coeff = 185 }
@@ -29,7 +30,7 @@ SIG_GEN_CoeffsInitStruct corr_coeff = {
   corr_amp,
   1,
   corr_freq,
-  11
+  12
 };
 //  sig_gen_##N.max_duty_cycle_percent = 68; \
 

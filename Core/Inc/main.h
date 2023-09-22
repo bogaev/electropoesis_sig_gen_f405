@@ -94,7 +94,7 @@ void Error_Handler(void);
 #define RELAY_TRI_STATE() HAL_GPIO_WritePin(RELAY_220V_GPIO_Port, RELAY_220V_Pin, GPIO_PIN_SET)
 #define RELAY_GROUND() HAL_GPIO_WritePin(RELAY_220V_GPIO_Port, RELAY_220V_Pin, GPIO_PIN_RESET)
 
-#define THIS_IS_MAIN_MCU
+//#define THIS_IS_MAIN_MCU
 //#define SELF_MESSAGE_ON
 
 #ifndef THIS_IS_MAIN_MCU
