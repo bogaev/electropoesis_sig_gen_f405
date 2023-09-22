@@ -17,31 +17,11 @@
 #endif
 
 void StartDefaultTask(void *argument) {
-  /* Infinite loop */
   static UBaseType_t uxHighWaterMark2;
   static size_t minEverFreeHeapSize2;
 
   MY_SIG_GEN_Init();
-
-//  SIG_GEN_SetSignalType(&sig_gen_1, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//  SIG_GEN_SetSignalType(&sig_gen_2, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//  SIG_GEN_SetSignalType(&sig_gen_3, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//  SIG_GEN_SetSignalType(&sig_gen_4, SIG_GEN_CARRIER, SIG_GEN_TYPE_SINUS);
-//
-//  SIG_GEN_SetFreq(&sig_gen_1, SIG_GEN_CARRIER, 111);
-//  SIG_GEN_SetFreq(&sig_gen_2, SIG_GEN_CARRIER, 122);
-//  SIG_GEN_SetFreq(&sig_gen_3, SIG_GEN_CARRIER, 133);
-//  SIG_GEN_SetFreq(&sig_gen_4, SIG_GEN_CARRIER, 144);
-//
-//  SIG_GEN_CommitChanges(&sig_gen_1);
-//  SIG_GEN_CommitChanges(&sig_gen_2);
-//  SIG_GEN_CommitChanges(&sig_gen_3);
-//  SIG_GEN_CommitChanges(&sig_gen_4);
-
   I2cStart(&hi2c1);
-
-//  RELAY_GROUND();
-//  LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
 
   for(;;) {
     LED_ON(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
@@ -75,12 +55,7 @@ void ChangeSignalParamsTask(void *argument) {
   static size_t minEverFreeHeapSize3;
 
   for(;;) {
-//    static uint32_t currentItemsGet = osMessageQueueGetCount(SignalGeneratorQueueHandle);
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &data, NULL, osWaitForever);
-//    currentItemsGet = osMessageQueueGetCount(SignalGeneratorQueueHandle);
-
-    uxHighWaterMark3 = uxTaskGetStackHighWaterMark( NULL );
-    minEverFreeHeapSize3 = xPortGetMinimumEverFreeHeapSize();
 
     if (status == osOK) {
       uint8_t channel = data.emitter;

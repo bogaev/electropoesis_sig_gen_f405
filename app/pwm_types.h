@@ -21,13 +21,6 @@ typedef enum {
   SIGNAL_TYPE_NUM
 } tdSignalTypes;
 
-//typedef enum {
-//  RPI_PARAM_SIGNAL_TYPE = 0,
-//  RPI_PARAM_AMP,
-//  RPI_PARAM_FREQ,
-//  RPI_PARAM_NUM
-//} enSignalParams;
-
 typedef enum {
   COM_MSG_NONE = 0,
   COM_MSG_CHANGE_PARAM,
