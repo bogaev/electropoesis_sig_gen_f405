@@ -13,12 +13,12 @@
 #ifdef SELF_MESSAGE_ON
   #define DELAY_LED 2000
 #else
-  #define DELAY_LED 200
+  #define DELAY_LED 100
 #endif
 
 void StartDefaultTask(void *argument) {
-  static UBaseType_t uxHighWaterMark2;
-  static size_t minEverFreeHeapSize2;
+//  static UBaseType_t uxHighWaterMark;
+//  static size_t minEverFreeHeapSize;
 
   MY_SIG_GEN_Init();
   I2cStart(&hi2c1);
@@ -30,8 +30,8 @@ void StartDefaultTask(void *argument) {
     LED_OFF(LED4_WD_UPDATE_GPIO_Port, LED4_WD_UPDATE_Pin);
     osDelay(DELAY_LED);
 
-    uxHighWaterMark2 = uxTaskGetStackHighWaterMark( NULL );
-    minEverFreeHeapSize2 = xPortGetMinimumEverFreeHeapSize();
+//    uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+//    minEverFreeHeapSize = xPortGetMinimumEverFreeHeapSize();
 
 #ifdef SELF_MESSAGE_ON
     static tdUartMessage msg = {{100, 0, 4, UART_SIGNAL_CARRIER, SIG_GEN_PARAM_FREQ, 0}, 0};
@@ -51,9 +51,6 @@ void ChangeSignalParamsTask(void *argument) {
   tdPwmData data;
   osStatus_t status;
 
-  static UBaseType_t uxHighWaterMark3;
-  static size_t minEverFreeHeapSize3;
-
   for(;;) {
     status = osMessageQueueGet(SignalGeneratorQueueHandle, &data, NULL, osWaitForever);
 
@@ -68,10 +65,10 @@ void ChangeSignalParamsTask(void *argument) {
         SIG_GEN_Pause(&sig_gen_2);
         SIG_GEN_Pause(&sig_gen_3);
         SIG_GEN_Pause(&sig_gen_4);
-        osDelay(200);
+        osDelay(DELAY_LED);
         RELAY_GROUND();
         LED_ON(LED3_RELAY_GROUND_GPIO_Port, LED3_RELAY_GROUND_Pin);
-        osDelay(200);
+        osDelay(DELAY_LED);
         i2c->SetStatus({COM_STATUS_OK, MCU_STATUS_RELAY_ON});
       } else if (data.type == COM_MSG_RESUME) {
         SIG_GEN_Resume(&sig_gen_1);
@@ -87,7 +84,7 @@ void ChangeSignalParamsTask(void *argument) {
         i2c->SetStatus({COM_STATUS_OK, MCU_STATUS_PAUSE});
       }
     } else {
-      Error_Handler();
+        i2c->SetStatus({COM_STATUS_ERR, MCU_STATUS_ERR});
     }
   }
 }

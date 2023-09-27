@@ -44,10 +44,11 @@ void I2cInterface::RPI_ListenCpltCallback(I2C_HandleTypeDef *hi2c) {
 }
 
 void I2cInterface::RPI_AbortCallback(I2C_HandleTypeDef *hi2c) {
+  i2c->ReInit();
 }
 
 void I2cInterface::RPI_ErrorCallback(I2C_HandleTypeDef *hi2c) {
-  Error_Handler();
+  i2c->ReInit();
 }
 
 void I2cInterface::Init(I2C_HandleTypeDef *hi2c,

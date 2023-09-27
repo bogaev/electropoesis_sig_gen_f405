@@ -25,6 +25,7 @@ public:
   void Init(I2C_HandleTypeDef *hi2c,
             uint16_t addr,
             enI2cMode mode);
+  void ReInit();
 
   virtual HAL_StatusTypeDef TransmitMessage(uint16_t target_addr,
                                             uint32_t data) override;
@@ -41,7 +42,6 @@ private:
 
   ComAnswer ReadData();
 
-  void ReInit();
   void GetMessageFromMaster();
   void AnswerBackToMaster();
 
